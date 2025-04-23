@@ -96,7 +96,7 @@ script = ExtResource("1_cuyo6")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_t4ive")
-animation = &"idle_side"
+animation = &"walk_side"
 autoplay = "idle_side"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

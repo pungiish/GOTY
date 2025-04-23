@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpellEffect" load_steps=2 format=3 uid="uid://bfvjjccqfkwle"]
+
+[ext_resource type="Script" uid="uid://706p0pk2pu15" path="res://scenes/spell/spellEffect.gd" id="1_4olei"]
+
+[resource]
+script = ExtResource("1_4olei")
+type = 1
+magnitude = 1.0
+duration = 18.0
+metadata/_custom_type_script = "uid://706p0pk2pu15"
