@@ -14,7 +14,7 @@ const SPEED = 100
 var state: State = State.IDLE_DOWN
 var last_state: State = State.IDLE_DOWN
 var queued_state = null
-@export var spell_offset: Vector2 = Vector2(0, -8)  # shift spawn point above feet
+@export var spell_offset: Vector2 = Vector2(20, -10)  # shift spawn point above feet
 @export var spell_cooldown: float = 0.5
 var can_cast: bool = true
 var direction = Vector2.RIGHT
@@ -164,7 +164,11 @@ func cast_spell(spellName: String):
 	#var dir = (world_mouse - global_position).normalized()
 	# 2) spawn the spell
 	# if using SpellManager:
-	SpellManagerSingleton.cast(spellName, global_position + spell_offset, direction)
+	match direction:
+		Vector2.RIGHT: spell_offset = Vector2(20, -10)
+		Vector2.LEFT: spell_offset = Vector2(-20, -10)
+	var aim_dir = velocity.normalized() if velocity.length() > 0 else direction
+	SpellManagerSingleton.cast(spellName, global_position + spell_offset, aim_dir)
 
 
 	# 3) play cast animation
