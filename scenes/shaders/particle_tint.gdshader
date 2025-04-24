@@ -1,15 +1,13 @@
-// res://shaders/particle_tint.shader
+// res://shaders/particle_tint.gdshader
 shader_type canvas_item;
 
-// this is the particle’s texture, made available automatically:
-uniform sampler2D texture;
+// the particle’s texture (shows up as 'Texture' in the Inspector)
+uniform sampler2D texture : source_color;
 
-// your tint (pick in the inspector or drive from GDScript)
-uniform vec4 tint_color = vec4(1.0, 200.0, 1.0, 1.0);
+// your tint (exposed as a color picker)
+uniform vec4 tint_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 void fragment() {
-    // sample the particle’s sprite
-    vec4 tex = texture(texture, UV);
-    // multiply by your tint
-    COLOR = tex * tint_color;
+    vec4 texcol = texture(texture, UV);
+    COLOR = texcol * tint_color;
 }

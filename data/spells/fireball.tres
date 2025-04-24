@@ -11,6 +11,7 @@ script = ExtResource("2_70bwy")
 name = "fireball"
 scene = ExtResource("2_ecc7m")
 base_speed = 150.0
+base_lifetime = 10.0
 base_damage = 20
 effects = Array[ExtResource("1_t20d3")]([ExtResource("2_jw1x3")])
 tint_color = Color(0.945947, 0.215265, 0.670025, 1)

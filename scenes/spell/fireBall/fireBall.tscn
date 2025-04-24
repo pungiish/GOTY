@@ -4,7 +4,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v7lvy"]
 shader = ExtResource("1_ae25h")
-shader_parameter/tint_color = Vector4(1, 200, 1, 1)
+shader_parameter/tint_color = Color(1, 1, 1, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6a0qi"]
 lifetime_randomness = 0.45

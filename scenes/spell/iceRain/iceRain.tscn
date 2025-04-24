@@ -4,13 +4,14 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ufkdc"]
 shader = ExtResource("1_xylk4")
-shader_parameter/tint_color = Vector4(1, 200, 1, 1)
+shader_parameter/tint_color = Color(1, 1, 1, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xylk4"]
-lifetime_randomness = 1.0
 particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 9.46
+emission_shape = 3
+emission_box_extents = Vector3(150, 1, 1)
+spread = 96.07
+initial_velocity_max = 40.4
 gravity = Vector3(0, 98, 0)
 linear_accel_min = 50.2
 linear_accel_max = 100.0
@@ -19,7 +20,8 @@ scale_max = 5.08
 [node name="SpellParticles" type="GPUParticles2D"]
 material = SubResource("ShaderMaterial_ufkdc")
 amount = 100
-lifetime = 2.28
-speed_scale = 1.87
-randomness = 0.82
+lifetime = 0.31
+preprocess = 1.14
+randomness = 0.38
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_xylk4")
