@@ -55,7 +55,7 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 
 # get your particles node
 	var parts = spell.get_node("SpellParticles") as GPUParticles2D
-
+	parts = self.setSpellRotation(parts, dir)
 	# grab the ShaderMaterial from the Material-Override slot
 	var shared_mat = parts.material as ShaderMaterial
 	if shared_mat:
@@ -69,3 +69,12 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 	parts.emitting = true
 	# 4) Add to the scene
 	get_tree().current_scene.add_child(spell)
+
+func setSpellRotation(parts: GPUParticles2D, dir: Vector2) -> GPUParticles2D:
+	match dir:
+		Vector2.UP:    parts.rotation_degrees = 260
+		Vector2.RIGHT: parts.rotation_degrees = 0
+		Vector2.DOWN:  parts.rotation_degrees = 90
+		Vector2.LEFT:  parts.rotation_degrees = 180
+	return parts
+	
