@@ -22,16 +22,56 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 		return
 	var data = spells[spell_name]
 
-	# 1) Instantiate the scene
+	if data.is_aoe:
+		var half_w = data.aoe_width * 0.5
+		for i in range(data.aoe_count):
+			# 1) Instantiate the base‐spell scene, not the resource itself!
+			var shard = data.scene.instantiate()
+
+			# 2) Position it somewhere above (and optionally to the side) of the player
+			var x = origin.x + dir.x + 30
+			var y = origin.y - data.aoe_spawn_height
+			shard.position = Vector2(x, y)
+
+			# 3) Give it a straight‐down direction and the usual stats
+			#shard.direction = Vector2.DOWN
+			shard.speed = data.base_speed
+			shard.damage = data.base_damage
+			shard.lifetime = data.base_lifetime
+			# 4) Apply any effects exactly as you do in the single‐spell case
+			for eff in data.effects:
+				if eff == null:
+					continue
+				var eff_copy = eff.duplicate(true) as SpellEffect
+				eff_copy.apply_to(shard)
+
+			# 5) Attach & tint its particle VFX (same as single‐spell)
+			if data.particle_scene:
+				var vfx = data.particle_scene.instantiate() as Node2D
+				var parts = vfx
+				# rotate (not strictly needed for straight‐down, but safe)				
+				parts.rotation_degrees = rad_to_deg(Vector2.DOWN.angle())
+				# unique‐ify + tint
+				if parts.material:
+					var mat = (parts.material as ShaderMaterial).duplicate()
+					parts.material = mat
+					mat.set_shader_parameter("tint_color", data.tint_color)
+				parts.emitting = true
+				shard.get_node("VFX").add_child(vfx)
+				vfx.position = Vector2.ZERO
+			# 6) Finally, add the shard to the scene
+			get_tree().current_scene.add_child(shard)
+		return
 	var spell = data.scene.instantiate()
 	spell.position = origin
 	spell.direction = dir.normalized()
-
 	# 2) Apply base stats *and* skill‐tree modifiers
 	#var speed_mod = SkillTree.get_modifier("spell_speed")    # e.g. 1.2 for +20%
 	#var dmg_mod   = SkillTree.get_modifier("spell_damage")  # e.g. 1.5 for +50%
 	var speed_mod = 1
 	var dmg_mod = 1
+	var lifetime_mod = 1
+	spell.lifetime = data.base_lifetime * speed_mod
 	spell.speed  = data.base_speed * speed_mod
 	spell.damage = data.base_damage * dmg_mod
 
@@ -53,28 +93,30 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 	# now inject it into your spell
 		eff_copy.apply_to(spell)
 
-# get your particles node
-	var parts = spell.get_node("SpellParticles") as GPUParticles2D
-	parts = self.setSpellRotation(parts, dir)
-	# grab the ShaderMaterial from the Material-Override slot
-	var shared_mat = parts.material as ShaderMaterial
-	if shared_mat:
-		# make a unique copy just for this spell
-		var unique_mat = shared_mat.duplicate() as ShaderMaterial
-		parts.material = unique_mat        # override with the unique one
-		unique_mat.set_shader_parameter("tint_color", data.tint_color)
-	else:
-		push_error("SpellParticles has no ShaderMaterial!")
-	# now start emitting
-	parts.emitting = true
-	# 4) Add to the scene
+		if data.particle_scene:
+			var vfx = data.particle_scene.instantiate() as Node2D
+			var parts = vfx
+			# 2a) rotate to aim
+			set_spell_rotation(parts, dir)
+			# 2b) unique‐ify & tint
+			var shared_mat = parts.material as ShaderMaterial
+			if shared_mat:
+				var unique_mat = shared_mat.duplicate() as ShaderMaterial
+				parts.material = unique_mat
+				unique_mat.set_shader_parameter("tint_color", data.tint_color)
+			else:
+				push_error("SpellParticles has no ShaderMaterial!")
+			# 2c) start emitting
+			parts.emitting = true
+
+			# finally add under your spell
+			spell.get_node("VFX").add_child(vfx)
+			vfx.position = Vector2.ZERO
+
+	# 3) Add the spell to the world
 	get_tree().current_scene.add_child(spell)
 
-func setSpellRotation(parts: GPUParticles2D, dir: Vector2) -> GPUParticles2D:
-	match dir:
-		Vector2.UP:    parts.rotation_degrees = 260
-		Vector2.RIGHT: parts.rotation_degrees = 0
-		Vector2.DOWN:  parts.rotation_degrees = 90
-		Vector2.LEFT:  parts.rotation_degrees = 180
-	return parts
+func set_spell_rotation(parts: GPUParticles2D, dir: Vector2) -> void:
+	# dir.angle() returns radians; convert to degrees
+	parts.rotation_degrees = rad_to_deg(dir.angle())
 	
