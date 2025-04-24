@@ -139,15 +139,18 @@ func _on_animation_finished(anim_name: String) -> void:
 
 func handle_cast():
 	if Input.is_action_just_pressed("cast_1") and can_cast:
-		cast_spell()
+		cast_spell("fireball")
 		can_cast = false
-		# start cooldown timer
+		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))
+	if Input.is_action_just_pressed("cast_2") and can_cast:
+		cast_spell("waterball")
+		can_cast = false
 		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))
 
 func _on_CastCooldown_timeout():
 	can_cast = true
 
-func cast_spell():
+func cast_spell(spellName: String):
 	# 1) determine direction: aim at mouse or toward facing
 	var viewport = get_viewport()
 	var mouse_pos = viewport.get_mouse_position()
@@ -156,7 +159,7 @@ func cast_spell():
 
 	# 2) spawn the spell
 	# if using SpellManager:
-	SpellManagerSingleton.cast("fireball", global_position + spell_offset, dir)
+	SpellManagerSingleton.cast(spellName, global_position + spell_offset, dir)
 
 
 	# 3) play cast animation

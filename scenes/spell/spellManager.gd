@@ -48,7 +48,7 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 
 	# apply any magnitude/duration modifiers…
 		eff_copy.magnitude = eff_copy.magnitude * 1
-		eff_copy.duration  = eff_copy.duration  * 1
+		eff_copy.duration  = eff_copy.duration  * 1	
 
 	# now inject it into your spell
 		eff_copy.apply_to(spell)

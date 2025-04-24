@@ -1,11 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpu5e8gf3c1jw"]
+[gd_scene load_steps=6 format=3 uid="uid://bpu5e8gf3c1jw"]
 
 [ext_resource type="Shader" uid="uid://3cpo1vf73fpa" path="res://scenes/shaders/particle_tint.gdshader" id="1_dnpg1"]
 [ext_resource type="Script" uid="uid://bvpp3i1v88715" path="res://scenes/spell/baseSpell.gd" id="1_u7yfs"]
-[ext_resource type="Texture2D" uid="uid://c4lfrq4ye1wlo" path="res://assets/particle_circle.png" id="2_u7yfs"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_d27g5"]
-size = Vector2(10, 10)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d27g5"]
 shader = ExtResource("1_dnpg1")
@@ -13,7 +9,10 @@ shader_parameter/tint_color = Vector4(1, 200, 1, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d27g5"]
 particle_flag_disable_z = true
+emission_shape = 2
+emission_sphere_radius = 10.0
 gravity = Vector3(0, 98, 0)
+scale_min = 0.2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dnpg1"]
 radius = 1.0
@@ -22,12 +21,14 @@ radius = 1.0
 top_level = true
 script = ExtResource("1_u7yfs")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("PlaceholderTexture2D_d27g5")
-
 [node name="SpellParticles" type="GPUParticles2D" parent="."]
+physics_interpolation_mode = 2
 material = SubResource("ShaderMaterial_d27g5")
-texture = ExtResource("2_u7yfs")
+amount = 300
+lifetime = 0.2
+visibility_rect = Rect2(-50, -50, 100, 100)
+local_coords = true
+trail_lifetime = 0.01
 process_material = SubResource("ParticleProcessMaterial_d27g5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
