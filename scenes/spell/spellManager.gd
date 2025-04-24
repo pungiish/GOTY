@@ -56,13 +56,15 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 # get your particles node
 	var parts = spell.get_node("SpellParticles") as GPUParticles2D
 
-# grab the ShaderMaterial from the Material-Override slot
-	var shader_mat = parts.material as ShaderMaterial
-	if shader_mat:
-		shader_mat.set_shader_parameter("tint_color", data.tint_color)
+	# grab the ShaderMaterial from the Material-Override slot
+	var shared_mat = parts.material as ShaderMaterial
+	if shared_mat:
+		# make a unique copy just for this spell
+		var unique_mat = shared_mat.duplicate() as ShaderMaterial
+		parts.material = unique_mat        # override with the unique one
+		unique_mat.set_shader_parameter("tint_color", data.tint_color)
 	else:
-		push_error("SpellParticles has no ShaderMaterial in Material Override!")
-
+		push_error("SpellParticles has no ShaderMaterial!")
 	# now start emitting
 	parts.emitting = true
 	# 4) Add to the scene
