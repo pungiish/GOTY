@@ -7,7 +7,7 @@ enum State {
 	TRANSITION
 }
 
-const SPEED = 150
+const SPEED = 100
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -17,6 +17,7 @@ var queued_state = null
 @export var spell_offset: Vector2 = Vector2(0, -8)  # shift spawn point above feet
 @export var spell_cooldown: float = 0.5
 var can_cast: bool = true
+var direction = Vector2.RIGHT
 # Map of turn animations for each from→to pair
 var transition_map := {
 	State.WALK_UP: {
@@ -54,6 +55,7 @@ func _physics_process(_delta: float) -> void:
 
 	# Flip sprite for left/right
 	if input_vec.x > 0:
+		
 		sprite.flip_h = false
 	elif input_vec.x < 0:
 		sprite.flip_h = true
@@ -73,13 +75,17 @@ func _get_state_from_input(input_vec: Vector2) -> State:
 	# Choose walk direction based on dominant axis
 	if abs(input_vec.x) > abs(input_vec.y):
 		if input_vec.x > 0:
+			direction = Vector2.RIGHT
 			return State.WALK_RIGHT
 		else:
+			direction = Vector2.LEFT
 			return State.WALK_LEFT
 	else:
-		if input_vec.y > 0: 
+		if input_vec.y > 0:
+			direction = Vector2.DOWN
 			return State.WALK_DOWN
 		else:
+			direction = Vector2.UP
 			return State.WALK_UP
 
 func _get_idle_state_from(from_state: State) -> State:
@@ -152,14 +158,13 @@ func _on_CastCooldown_timeout():
 
 func cast_spell(spellName: String):
 	# 1) determine direction: aim at mouse or toward facing
-	var viewport = get_viewport()
-	var mouse_pos = viewport.get_mouse_position()
-	var world_mouse = get_global_mouse_position()
-	var dir = (world_mouse - global_position).normalized()
-
+	#var viewport = get_viewport()
+	#var mouse_pos = viewport.get_mouse_position()
+	#var world_mouse = get_global_mouse_position()
+	#var dir = (world_mouse - global_position).normalized()
 	# 2) spawn the spell
 	# if using SpellManager:
-	SpellManagerSingleton.cast(spellName, global_position + spell_offset, dir)
+	SpellManagerSingleton.cast(spellName, global_position + spell_offset, direction)
 
 
 	# 3) play cast animation

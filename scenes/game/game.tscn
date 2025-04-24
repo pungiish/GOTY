@@ -6,7 +6,8 @@
 [node name="game" type="Node2D"]
 
 [node name="Rocks2" type="Sprite2D" parent="."]
-position = Vector2(428, 231)
+position = Vector2(832.5, 429.5)
+scale = Vector2(1.42135, 1.36759)
 texture = ExtResource("1_sul5r")
 
 [node name="character" parent="." instance=ExtResource("2_7h61r")]

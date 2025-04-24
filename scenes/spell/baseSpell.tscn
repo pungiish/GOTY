@@ -8,14 +8,21 @@ shader = ExtResource("1_dnpg1")
 shader_parameter/tint_color = Vector4(1, 200, 1, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u7yfs"]
+lifetime_randomness = 0.45
 particle_flag_disable_z = true
 emission_shape = 2
 emission_sphere_radius = 10.0
-gravity = Vector3(0, 98, 0)
+direction = Vector3(-1, 0, 0)
+spread = 19.667
+initial_velocity_max = 60.72
+radial_velocity_min = -307.14
+radial_velocity_max = -21.43
+gravity = Vector3(0, 0, 0)
 scale_min = 0.2
+scale_max = 8.14
+scale_over_velocity_max = 785.71
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dnpg1"]
-radius = 1.0
 
 [node name="BaseSpell" type="Area2D"]
 top_level = true
@@ -24,8 +31,14 @@ script = ExtResource("1_u7yfs")
 [node name="SpellParticles" type="GPUParticles2D" parent="."]
 physics_interpolation_mode = 2
 material = SubResource("ShaderMaterial_d27g5")
-amount = 5000
-lifetime = 0.2
+amount = 2000
+lifetime = 0.81
+speed_scale = 1.65
+explosiveness = 0.41
+randomness = 1.0
+use_fixed_seed = true
+seed = 958758342
+collision_base_size = 0.0
 visibility_rect = Rect2(-50, -50, 100, 100)
 local_coords = true
 trail_lifetime = 0.01
