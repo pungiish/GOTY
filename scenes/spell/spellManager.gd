@@ -29,7 +29,7 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 			var shard = data.scene.instantiate()
 
 			# 2) Position it somewhere above (and optionally to the side) of the player
-			var x = origin.x + dir.x + 30
+			var x = origin.x + dir.x + 200
 			var y = origin.y - data.aoe_spawn_height
 			shard.position = Vector2(x, y)
 

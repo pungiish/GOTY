@@ -7,7 +7,7 @@ enum State {
 	TRANSITION
 }
 
-const SPEED = 100
+const SPEED = 200
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 

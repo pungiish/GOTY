@@ -10,14 +10,14 @@
 script = ExtResource("4_b84fi")
 name = "waterball"
 scene = ExtResource("3_hgile")
-base_speed = 165.0
-base_lifetime = 2.0
+base_speed = 450.0
+base_lifetime = 3.0
 base_damage = 10
 effects = Array[ExtResource("1_8e7s5")]([ExtResource("2_paual")])
 tint_color = Color(0.435602, 0.532924, 0.948798, 1)
 particle_scene = ExtResource("3_paual")
 is_aoe = true
-aoe_spawn_height = -100.0
+aoe_spawn_height = 90.0
 aoe_width = 300.0
 aoe_count = 10
 metadata/_custom_type_script = "uid://cp873gljojt31"
