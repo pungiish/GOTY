@@ -4,7 +4,7 @@ class_name SpellManager
 
 # Holds your base spell definitions
 var spells: Dictionary[String, SpellResource] = {}
-
+const PARTICLE_CIRCLE = preload("res://assets/particle_circle.png")
 func _ready():
 	_load_all_spells()
 
@@ -47,7 +47,7 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 
 			# 5) Attach & tint its particle VFX (same as single‐spell)
 			if data.particle_scene:
-				var vfx = data.particle_scene.instantiate() as Node2D
+				var vfx = data.particle_scene.instantiate()
 				var parts = vfx
 				# rotate (not strictly needed for straight‐down, but safe)				
 				parts.rotation_degrees = rad_to_deg(Vector2.DOWN.angle())
@@ -63,6 +63,8 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 			get_tree().current_scene.add_child(shard)
 		return
 	var spell = data.scene.instantiate()
+	var sprite = spell.get_node("Sprite2D") as Sprite2D
+	sprite.texture = PARTICLE_CIRCLE
 	spell.position = origin
 	spell.direction = dir.normalized()
 	# 2) Apply base stats *and* skill‐tree modifiers
@@ -71,7 +73,7 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 	var speed_mod = 1
 	var dmg_mod = 1
 	var lifetime_mod = 1
-	spell.lifetime = data.base_lifetime * speed_mod
+	spell.lifetime = data.base_lifetime * lifetime_mod
 	spell.speed  = data.base_speed * speed_mod
 	spell.damage = data.base_damage * dmg_mod
 

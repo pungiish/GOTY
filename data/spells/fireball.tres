@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="SpellResource" load_steps=6 format=3 uid="uid://b42jtpo1w5608"]
+[gd_resource type="Resource" script_class="SpellResource" load_steps=5 format=3 uid="uid://b42jtpo1w5608"]
 
 [ext_resource type="Script" uid="uid://706p0pk2pu15" path="res://scenes/spell/spellEffect.gd" id="1_t20d3"]
 [ext_resource type="Script" uid="uid://cp873gljojt31" path="res://scenes/spell/spellResource.gd" id="2_70bwy"]
 [ext_resource type="PackedScene" uid="uid://bpu5e8gf3c1jw" path="res://scenes/spell/baseSpell.tscn" id="2_ecc7m"]
 [ext_resource type="Resource" uid="uid://bfvjjccqfkwle" path="res://data/spellEffects/burnEffect.tres" id="2_jw1x3"]
-[ext_resource type="PackedScene" uid="uid://c5xufoiq5kwh5" path="res://scenes/spell/fireBall/fireBall.tscn" id="3_ecc7m"]
 
 [resource]
 script = ExtResource("2_70bwy")
@@ -15,7 +14,6 @@ base_lifetime = 10.0
 base_damage = 20
 effects = Array[ExtResource("1_t20d3")]([ExtResource("2_jw1x3")])
 tint_color = Color(0.945947, 0.215265, 0.670025, 1)
-particle_scene = ExtResource("3_ecc7m")
 is_aoe = false
 aoe_spawn_height = 200.0
 aoe_width = 300.0
