@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpu5e8gf3c1jw"]
+[gd_scene load_steps=3 format=3 uid="uid://bpu5e8gf3c1jw"]
 
 [ext_resource type="Script" uid="uid://bvpp3i1v88715" path="res://scenes/spell/baseSpell.gd" id="1_u7yfs"]
-[ext_resource type="Texture2D" uid="uid://dk5kfcpfancik" path="res://icon.svg" id="2_u7yfs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dnpg1"]
 radius = 63.0079
@@ -10,8 +9,8 @@ radius = 63.0079
 top_level = true
 script = ExtResource("1_u7yfs")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_u7yfs")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_dnpg1")

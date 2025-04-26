@@ -1,9 +1,9 @@
 [gd_scene load_steps=4 format=3 uid="uid://c5xufoiq5kwh5"]
 
-[ext_resource type="Shader" uid="uid://3cpo1vf73fpa" path="res://scenes/shaders/particle_tint.gdshader" id="1_ae25h"]
+[ext_resource type="Shader" uid="uid://3cpo1vf73fpa" path="res://scenes/shaders/particle_tint.gdshader" id="1_mknir"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v7lvy"]
-shader = ExtResource("1_ae25h")
+shader = ExtResource("1_mknir")
 shader_parameter/tint_color = Color(1, 1, 1, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6a0qi"]

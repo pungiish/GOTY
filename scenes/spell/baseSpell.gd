@@ -1,5 +1,5 @@
 extends Area2D
-
+class_name BaseSpell
 @export var speed: float = 200
 @export var lifetime: float = 0
 @export var damage:    int     = 10
@@ -15,7 +15,7 @@ func _ready():
 
 func _physics_process(delta):
 	var distance = position - initial_position;
-	if (sqrt(distance.y*distance.y + distance.x*distance.x) < max_distance):
+	if (sqrt(pow(distance.y,2) + pow(distance.x, 2)) < max_distance):
 		position += direction * speed * delta
 	else:
 		queue_free()

@@ -18,6 +18,7 @@ var queued_state = null
 @export var spell_cooldown: float = 0.5
 var can_cast: bool = true
 var direction = Vector2.RIGHT
+@export var mana = 1000;
 # Map of turn animations for each from→to pair
 var transition_map := {
 	State.WALK_UP: {
@@ -145,14 +146,11 @@ func _on_animation_finished(anim_name: String) -> void:
 
 func handle_cast():
 	if Input.is_action_just_pressed("cast_1") and can_cast:
-		cast_spell("fireball")
+		cast_spell("projectile")
 		can_cast = false
-		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))
 	if Input.is_action_just_pressed("cast_2") and can_cast:
-		cast_spell("waterball")
+		cast_spell("aoe")
 		can_cast = false
-		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))
-
 func _on_CastCooldown_timeout():
 	can_cast = true
 
@@ -168,7 +166,11 @@ func cast_spell(spellName: String):
 		Vector2.RIGHT: spell_offset = Vector2(20, -10)
 		Vector2.LEFT: spell_offset = Vector2(-20, -10)
 	var aim_dir = velocity.normalized() if velocity.length() > 0 else direction
-	SpellManagerSingleton.cast(spellName, global_position + spell_offset, aim_dir)
+	var mana_cost = SpellManagerSingleton.cast(spellName, global_position + spell_offset, aim_dir, mana)
+	if mana_cost:
+		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))	
+		mana -= mana_cost
+	print(mana)
 
 
 	# 3) play cast animation
