@@ -170,7 +170,6 @@ func cast_spell(spellName: String):
 	if mana_cost:
 		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))	
 		mana -= mana_cost
-	print(mana)
 
 
 	# 3) play cast animation

@@ -7,6 +7,19 @@ var spells: Dictionary[String, SpellResource] = {}
 const PARTICLE_CIRCLE = preload("res://assets/particle_circle.png")
 const AOEFIRE = preload("res://data/spellSprites/AOE/Fire/fire.tres")
 const PROJECTILEFIRE = preload("res://data/spellSprites/Projectile/Fire/fire.tres")
+const TRAIL = preload("res://scenes/spell/ice/trail.tscn")
+
+const ELEMENT_DATA := {
+	SpellResource.Element.FIRE: {
+		"color": Color(0.698, 0.133, 0.133), # FIREBRICK
+	},
+	SpellResource.Element.WATER: {
+		"color": Color.AQUAMARINE
+	},
+	SpellResource.Element.AIR: {
+		"color": Color(0.973, 0.973, 0.961), # FLORAL_WHITE
+	},
+}
 func _ready():
 	_load_all_spells()
 
@@ -174,53 +187,41 @@ func _configure_spell(spell:BaseSpell, data:SpellResource, dir:Vector2, pos:Vect
 			copy.apply_to(spell)
 
 
-	# 3) VFX—particles, tint, rotation
-	if data.particle_scene:
-		var vfx = data.particle_scene.instantiate() as Node2D
-		var parts = vfx.get_node("SpellParticles") as GPUParticles2D
-		parts.rotation_degrees = rad_to_deg(dir.angle())
-		if parts.material:
-			var mat = (parts.material as ShaderMaterial).duplicate()
-			parts.material = mat
-			mat.set_shader_parameter("tint_color", data.tint_color)
-		parts.emitting = true
-		spell.get_node("VFX").add_child(vfx)
-		vfx.position = Vector2.ZERO
+	## 3) VFX—particles, tint, rotation
+		#data.particle_scene = TRAIL
+		#var vfx = data.particle_scene.instantiate() as Node2D
+		#var parts = vfx
+		#print(rad_to_deg(dir.angle()) )
+		#parts.rotation_degrees = 360 + rad_to_deg(dir.angle()) 
+		#if parts.material:
+			#var mat = (parts.material as ShaderMaterial).duplicate()
+			#parts.material = mat
+			#mat.set_shader_parameter("tint_color", _get_element_color(data.element))
+		#parts.emitting = true
+		#spell.get_node("VFX").add_child(vfx)
+		#vfx.position = Vector2.ZERO
 
 func set_spell_rotation(parts: GPUParticles2D, dir: Vector2) -> void:
-	# dir.angle() returns radians; convert to degrees
 	parts.rotation_degrees = rad_to_deg(dir.angle())
+
+func _get_element_color(element: int) -> Color:
+	var data = ELEMENT_DATA.get(element, null)
+	if data:
+		return data["color"]
+	else:
+		return Color.WHITE
 
 func _configure_aoe_logic(spell:BaseSpell, data:SpellResource):
 	var sprite = spell.get_node("AnimatedSprite2D") as AnimatedSprite2D;
 	sprite.sprite_frames = AOEFIRE
-	match data.element:
-		SpellResource.Element.FIRE:
-			sprite.modulate = Color.FIREBRICK
-		SpellResource.Element.WATER:
-			sprite.modulate = Color.LIGHT_SKY_BLUE
-			#_apply_water_logic(spell, data)
-		SpellResource.Element.AIR:
-			sprite.modulate = Color.FLORAL_WHITE
-			pass
-			#_apply_air_logic(spell, data)
-	
+	sprite.modulate = _get_element_color(data.element)
 	sprite.play("attack")
 	pass
 func _configure_projectile_logic(spell:BaseSpell, data:SpellResource, dir: Vector2):
 	var sprite = spell.get_node("AnimatedSprite2D") as AnimatedSprite2D;
+	sprite.scale = Vector2(0.2, 0.2);
 	sprite.sprite_frames = PROJECTILEFIRE
-	match data.element:
-		SpellResource.Element.FIRE:
-			sprite.modulate = Color.FIREBRICK
-		SpellResource.Element.WATER:
-			sprite.modulate = Color.LIGHT_SKY_BLUE
-			pass
-			#_apply_water_logic(spell, data)
-		SpellResource.Element.AIR:
-			sprite.modulate = Color.FLORAL_WHITE
-			pass
-			#_apply_air_logic(spell, data)
+	sprite.modulate = _get_element_color(data.element)
 	sprite.play("attack")
 	sprite.rotation_degrees = rad_to_deg(dir.angle())
 	pass
