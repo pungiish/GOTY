@@ -186,7 +186,12 @@ func cast_spell(spellName: String):
 		aim_dir = direction
 
 	var cast_pos = global_position + offset
+	sprite.stop()
+	sprite.play("attack")
 	var mana_cost = SpellManagerSingleton.cast(spellName, cast_pos, aim_dir, mana)
 	if mana_cost:
 		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))	
 		mana -= mana_cost
+	else:
+		pass
+		#anim when no mana
