@@ -23,8 +23,8 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 	var data = spells[spell_name]
 
 	if data.is_aoe:
-		var half_w = data.aoe_width * 0.5
-		for i in range(data.aoe_count):
+		var half_w = data.aoe_radius * 0.5
+		for i in range(data.count):
 			# 1) Instantiate the base‐spell scene, not the resource itself!
 			var shard = data.scene.instantiate()
 
@@ -35,9 +35,9 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 
 			# 3) Give it a straight‐down direction and the usual stats
 			#shard.direction = Vector2.DOWN
-			shard.speed = data.base_speed
-			shard.damage = data.base_damage
-			shard.lifetime = data.base_lifetime
+			shard.speed = data.projectile_speed
+			shard.damage = data.damage
+			shard.lifetime = data.lifetime
 			# 4) Apply any effects exactly as you do in the single‐spell case
 			for eff in data.effects:
 				if eff == null:
@@ -72,10 +72,10 @@ func cast(spell_name: String, origin: Vector2, dir: Vector2):
 	#var dmg_mod   = SkillTree.get_modifier("spell_damage")  # e.g. 1.5 for +50%
 	var speed_mod = 1
 	var dmg_mod = 1
-	var lifetime_mod = 1
-	spell.lifetime = data.base_lifetime * lifetime_mod
-	spell.speed  = data.base_speed * speed_mod
-	spell.damage = data.base_damage * dmg_mod
+	var distance_mod = 1
+	spell.max_distance = data.max_distance * distance_mod
+	spell.speed  = data.projectile_speed * speed_mod
+	spell.damage = data.damage * dmg_mod
 
 	# 3) Apply every effect, possibly tweaked by skills too
 	for eff in data.effects:

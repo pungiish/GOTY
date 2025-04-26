@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dk5kfcpfancik" path="res://icon.svg" id="2_u7yfs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dnpg1"]
+radius = 63.0079
 
 [node name="BaseSpell" type="Area2D"]
 top_level = true
