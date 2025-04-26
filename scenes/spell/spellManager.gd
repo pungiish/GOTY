@@ -7,7 +7,6 @@ var spells: Dictionary[String, SpellResource] = {}
 const PARTICLE_CIRCLE = preload("res://assets/particle_circle.png")
 const AOEFIRE = preload("res://data/spellSprites/AOE/Fire/fire.tres")
 const PROJECTILEFIRE = preload("res://data/spellSprites/Projectile/Fire/fire.tres")
-const TRAIL = preload("res://scenes/spell/ice/trail.tscn")
 
 const ELEMENT_DATA := {
 	SpellResource.Element.FIRE: {
