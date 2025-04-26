@@ -7,6 +7,20 @@ enum State {
 	TRANSITION
 }
 
+const BASE_OFFSETS = {
+	Vector2.RIGHT: Vector2( 20, -10),
+	Vector2.LEFT:  Vector2(-20, -10),
+	Vector2.UP:    Vector2(  0, -20),
+	Vector2.DOWN:  Vector2(  0,  20),
+}
+
+const AOE_OFFSETS = {
+	Vector2.RIGHT: Vector2( 200, -10),
+	Vector2.LEFT:  Vector2(-200, -10),
+	Vector2.UP:    Vector2(   0,-200),
+	Vector2.DOWN:  Vector2(   0, 200),
+}
+
 const SPEED = 200
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -160,17 +174,19 @@ func cast_spell(spellName: String):
 	#var mouse_pos = viewport.get_mouse_position()
 	#var world_mouse = get_global_mouse_position()
 	#var dir = (world_mouse - global_position).normalized()
-	# 2) spawn the spell
-	# if using SpellManager:
-	match direction:
-		Vector2.RIGHT: spell_offset = Vector2(20, -10)
-		Vector2.LEFT: spell_offset = Vector2(-20, -10)
-	var aim_dir = velocity.normalized() if velocity.length() > 0 else direction
-	var mana_cost = SpellManagerSingleton.cast(spellName, global_position + spell_offset, aim_dir, mana)
+	var offset = BASE_OFFSETS.get(direction, Vector2.ZERO)
+
+	if spellName == "aoe":
+		offset += AOE_OFFSETS.get(direction, Vector2.ZERO)
+
+	var aim_dir
+	if velocity.length() > 0:
+		aim_dir = velocity.normalized()
+	else:
+		aim_dir = direction
+
+	var cast_pos = global_position + offset
+	var mana_cost = SpellManagerSingleton.cast(spellName, cast_pos, aim_dir, mana)
 	if mana_cost:
 		get_tree().create_timer(spell_cooldown).connect("timeout", Callable(self, "_on_CastCooldown_timeout"))	
 		mana -= mana_cost
-
-
-	# 3) play cast animation
-	#$AnimatedSprite2D.play("cast_")

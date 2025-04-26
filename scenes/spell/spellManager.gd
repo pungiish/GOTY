@@ -17,7 +17,7 @@ const ELEMENT_DATA := {
 		"color": Color.AQUAMARINE
 	},
 	SpellResource.Element.AIR: {
-		"color": Color(0.973, 0.973, 0.961), # FLORAL_WHITE
+		"color": Color.WHITE
 	},
 }
 func _ready():
@@ -143,15 +143,16 @@ func cast(spell_name:String, origin:Vector2, dir:Vector2, mana) -> int:
 		return 0
 
 	if data.is_aoe:
-		_cast_aoe(data, origin)
+		_cast_aoe(data, origin, dir)
 	else:
 		_cast_projectile(data, origin, dir)
 
 	return data.mana_cost
 
 # Spawn one “shard” at x,y falling straight down
-func _cast_aoe(data:SpellResource, origin:Vector2) -> void:
+func _cast_aoe(data:SpellResource, origin:Vector2, dir: Vector2) -> void:
 	var half = data.aoe_radius * 0.5
+	print(origin)
 	for i in range(data.count):
 		var pos = Vector2(
 			origin.x + randf_range(-half, half),
