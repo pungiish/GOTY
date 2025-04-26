@@ -3,17 +3,19 @@
 [ext_resource type="Script" uid="uid://bvpp3i1v88715" path="res://scenes/spell/baseSpell.gd" id="1_u7yfs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dnpg1"]
+radius = 63.0079
 
 [node name="BaseSpell" type="Area2D"]
 top_level = true
 script = ExtResource("1_u7yfs")
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_dnpg1")
 
 [node name="Timer" type="Timer" parent="."]
-
-[node name="VFX" type="Node2D" parent="."]
 
 [connection signal="body_entered" from="." to="." method="_on_Spell_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

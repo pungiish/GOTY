@@ -1,17 +1,25 @@
 extends Area2D
-
+class_name BaseSpell
 @export var speed: float = 200
-@export var lifetime: float = 10
+@export var lifetime: float = 0
 @export var damage:    int     = 10
+@export var max_distance:      float = 800.0  # MAX DISTANCE before auto‐free
+@export var initial_position: Vector2
 var direction: Vector2 = Vector2.ZERO
 @onready var timer: Timer = $Timer
-
 func _ready():
+	initial_position = position
+	if (lifetime > 0):
+		timer.start(lifetime)
 	# auto-free after lifetime seconds
-	timer.start(lifetime)
 
 func _physics_process(delta):
-	position += direction * speed * delta
+	var distance = position - initial_position;
+	if (sqrt(pow(distance.y,2) + pow(distance.x, 2)) < max_distance):
+		position += direction * speed * delta
+	else:
+		queue_free()
+	
 
 func _on_Timer_timeout():
 	queue_free()
@@ -20,7 +28,6 @@ func _on_Spell_body_entered(body):
 	if body.is_in_group("enemies"):
 		#body.take_damage(damage)
 		queue_free()
-# ——— Effect hooks ———
 
 func add_burn(magnitude: float, duration: float) -> void:
 	pass
@@ -50,10 +57,11 @@ func _on_burn_end(burn_timer: Timer):
 		burn_timer.queue_free()
 
 func add_slow(magnitude: float, duration: float) -> void:
+	pass
 	# Example: reduce speed temporarily
-	var original_speed = speed
-	speed *= (1.0 - magnitude)  # magnitude = 0.2 → 20% slower
-	# restore after duration
-	await get_tree().create_timer(duration).timeout
-	if is_instance_valid(self):
-		speed = original_speed
+	#var original_speed = speed
+	#speed *= (1.0 - magnitude)  # magnitude = 0.2 → 20% slower
+	## restore after duration
+	#await get_tree().create_timer(duration).timeout
+	#if is_instance_valid(self):
+		#speed = original_speed
