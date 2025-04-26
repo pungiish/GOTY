@@ -50,10 +50,11 @@ func _on_burn_end(burn_timer: Timer):
 		burn_timer.queue_free()
 
 func add_slow(magnitude: float, duration: float) -> void:
+	pass
 	# Example: reduce speed temporarily
-	var original_speed = speed
-	speed *= (1.0 - magnitude)  # magnitude = 0.2 → 20% slower
-	# restore after duration
-	await get_tree().create_timer(duration).timeout
-	if is_instance_valid(self):
-		speed = original_speed
+	#var original_speed = speed
+	#speed *= (1.0 - magnitude)  # magnitude = 0.2 → 20% slower
+	## restore after duration
+	#await get_tree().create_timer(duration).timeout
+	#if is_instance_valid(self):
+		#speed = original_speed
