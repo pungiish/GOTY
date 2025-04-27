@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2qe3w70ns150"]
+
+[ext_resource type="Texture2D" uid="uid://csr3csmcguh38" path="res://assets/spells/AOEINDICATOR.png" id="1_3ylrh"]
+
+[node name="AoePreview" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_3ylrh")

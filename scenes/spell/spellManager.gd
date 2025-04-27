@@ -3,7 +3,7 @@ extends Node
 class_name SpellManager
 
 # Holds your base spell definitions
-var spells: Dictionary[String, SpellResource] = {}
+@export var spells: Dictionary[String, SpellResource] = {}
 const PARTICLE_CIRCLE = preload("res://assets/particle_circle.png")
 const AOEFIRE = preload("res://data/spellSprites/AOE/Fire/fire.tres")
 const PROJECTILEFIRE = preload("res://data/spellSprites/Projectile/Fire/fire.tres")
@@ -225,3 +225,38 @@ func _configure_projectile_logic(spell:BaseSpell, data:SpellResource, dir: Vecto
 	sprite.play("attack")
 	sprite.rotation_degrees = rad_to_deg(dir.angle())
 	pass
+
+#func compute_aoe_center(origin:Vector2, dir:Vector2, data:SpellResource) -> Vector2:
+	#if data.is_aoe:
+		## projectile AOE: shot arcs or falls like ice rain
+		## same formula we derived:
+		#var y0 = origin.y - data.aoe_spawn_height
+		#var v0 = data.projectile_speed
+		#var g  = data.gravity
+		#var t  = data.lifetime
+		#var fall = v0 * t + 0.5 * g * t * t
+		#return Vector2(origin.x, y0 + fall)
+	#else:
+		## instant / self-cast / ground-target AOE
+		## e.g. cast in a direction up to max_distance:
+		#return origin + dir.normalized() * data.max_distance
+
+func get_aoe_center(spell_name: String, origin: Vector2, dir: Vector2) -> Vector2:
+	var data = spells.get(spell_name, null)
+	if data == null:
+		push_error("get_aoe_center: Unknown spell '%s'" % spell_name)
+		return origin
+	if not data.is_aoe:
+		# Non-AOE spells just land at max_distance along dir
+		return origin + dir * data.max_distance
+	# Projectile-like AOE (e.g. ice rain)
+	# start Y = origin.y - spawn height
+	var y0 = origin.y - data.aoe_spawn_height
+	# initial downward speed & gravity & lifetime
+	var v0 = data.projectile_speed
+	var g  = 1
+	#var t  = data.lifetime
+	# Δy = v0*t + ½*g*t²
+	var fall = v0 * 1 + 0.5 * g * 1 * 1
+	# X stays centered on origin
+	return Vector2(origin.x, origin.y)

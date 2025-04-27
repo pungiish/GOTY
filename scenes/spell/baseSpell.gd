@@ -7,8 +7,17 @@ class_name BaseSpell
 @export var initial_position: Vector2
 var direction: Vector2 = Vector2.ZERO
 @onready var timer: Timer = $Timer
+@export var travel_time: float = 0.5
+
 func _ready():
 	initial_position = position
+	#var start = initial_position
+	#var character = get_parent().get_node("character")
+	#var end   = Vector2(global_position.x, character.global_position.y)
+	#var tween = create_tween()
+	#tween.tween_property(self, "global_position", end, travel_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	#tween.connect("finished", Callable(self, "_on_tween_finished"))
+	# (Optional) also queue_free() in animation_finished if you prefer
 	if (lifetime > 0):
 		timer.start(lifetime)
 	# auto-free after lifetime seconds
@@ -65,3 +74,6 @@ func add_slow(magnitude: float, duration: float) -> void:
 	#await get_tree().create_timer(duration).timeout
 	#if is_instance_valid(self):
 		#speed = original_speed
+		
+func _on_tween_finished():
+	queue_free()

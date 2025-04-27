@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+const CHARACTER = preload("res://scenes/character/character.tscn")
 # Directional and transitional states
 enum State {
 	IDLE_UP,    IDLE_RIGHT,  IDLE_DOWN,   IDLE_LEFT,
@@ -33,6 +33,8 @@ var queued_state = null
 var can_cast: bool = true
 var direction = Vector2.RIGHT
 @export var mana = 1000;
+var aoe_preview_scene = preload("res://scenes/spell/AOEPreview.tscn")
+var aoe_preview
 # Map of turn animations for each from→to pair
 var transition_map := {
 	State.WALK_UP: {
@@ -159,10 +161,32 @@ func _on_animation_finished(anim_name: String) -> void:
 
 
 func handle_cast():
+	if Input.is_action_pressed("cast_2"):
+		var data = SpellManagerSingleton.spells["aoe"]
+		var offset = BASE_OFFSETS.get(direction, Vector2.ZERO)
+		offset += AOE_OFFSETS.get(direction, Vector2.ZERO)
+		var cast_pos = global_position + offset
+		var aim_dir
+		if velocity.length() > 0:
+			aim_dir = velocity.normalized()
+		else:
+			aim_dir = direction
+		var center = SpellManagerSingleton.get_aoe_center("aoe", cast_pos, aim_dir)
+	# spawn or move the preview node
+		if aoe_preview == null:
+			aoe_preview = aoe_preview_scene.instantiate()
+			add_child(aoe_preview)
+		aoe_preview.global_position = center
+	# scale the circle so diameter = aoe_radius*2
+		var sprite = aoe_preview.get_node("Sprite2D") as Sprite2D
+		var tex_size = sprite.texture.get_size().x
+		sprite.scale = Vector2.ONE * (data.aoe_radius * 2.0 / tex_size)
 	if Input.is_action_just_pressed("cast_1") and can_cast:
 		cast_spell("projectile")
 		can_cast = false
-	if Input.is_action_just_pressed("cast_2") and can_cast:
+	if Input.is_action_just_released("cast_2") and can_cast:
+		aoe_preview.queue_free()
+		aoe_preview = null	
 		cast_spell("aoe")
 		can_cast = false
 func _on_CastCooldown_timeout():
